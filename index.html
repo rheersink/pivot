@@ -708,7 +708,6 @@
         display: none !important;
     }
 
-    /* ── INTRO MODAL ─────────────────────────────────────────────────────────── */
     #intro-modal { display:none; position:fixed; inset:0; z-index:9999; background:rgba(10,30,46,0.92); backdrop-filter:blur(4px); overflow-y:auto; cursor:pointer; }
     #intro-modal.visible { display:flex; align-items:flex-start; justify-content:center; }
     .intro-box { background:linear-gradient(160deg,#0d3349 0%,#1a5276 55%,#0d3349 100%); border:1px solid rgba(249,217,118,0.3); border-radius:16px; padding:16px; margin:16px; max-width:420px; width:100%; pointer-events:none; font-family:Georgia,serif; }
@@ -899,7 +898,7 @@
         },
         "2026-06-18": {
             theme:    "KITCHEN",
-            words:    ["BLEND", "SIMMER", "WHISK", "LADLE", "OVEN", "GRIND", "STEAM"],
+            words:    ["BLEND", "WHISK", "LADLE", "OVEN", "GRIND", "STEAM", "CHOP"],
             SIZE:     6,
             target:   "MERGE",
             pivot:    "BLEND",
@@ -910,32 +909,32 @@
             lossText: "MERGE — to combine into one. BLEND was the pivot: mixing to merging.",
         },
         "2026-06-19": {
-            theme:    "FOREST",
-            words:    ["FERNS", "MAPLE", "ACORN", "BARK", "MOSS", "GROVE", "BIRCH"],
+            theme:    "SAFARI",
+            words:    ["PRIDE", "TRACK", "PLAIN", "STALK", "HERD", "DUSTY", "PROWL"],
             SIZE:     6,
-            target:   "GRUFF",
-            pivot:    "BARK",
-            noise:    "AEIOTLNSMC",
-            latHint:  "Think manner, not trees.",
-            pivHint:  "BARK covers a tree — but dogs do it too. What word means rough and abrupt in manner?",
-            winText:  "Rough and ready. BARK was the pivot — tree covering to a gruff manner.",
-            lossText: "GRUFF — rough and abrupt. BARK was the pivot: tree skin to tone of voice.",
+            target:   "VINYL",
+            pivot:    "TRACK",
+            noise:    "AEIOULNTSC",
+            latHint:  "Think music — not footprints.",
+            pivHint:  "TRACK means to follow a trail — but a TRACK is also a song on a record. What word means a vinyl record?",
+            winText:  "Drop the needle. TRACK was the pivot — safari trail to a music record.",
+            lossText: "VINYL — a music record. TRACK was the pivot: animal trail to music track.",
         },
         "2026-06-20": {
             theme:    "MUSIC",
-            words:    ["CHORD", "BRIDGE", "NOTES", "BEAT", "BAND", "TEMPO", "PITCH"],
+            words:    ["CHORD", "NOTES", "BEAT", "BAND", "TEMPO", "PITCH", "LYRIC"],
             SIZE:     6,
-            target:   "CROSS",
-            pivot:    "BRIDGE",
+            target:   "PLUCK",
+            pivot:    "CHORD",
             noise:    "AEIOULNTSP",
-            latHint:  "Think spanning — not a song section.",
-            pivHint:  "BRIDGE links two sections of a song — what word means to go across something?",
-            winText:  "Spanning the gap. BRIDGE was the pivot — musical link to physical crossing.",
-            lossText: "CROSS — to traverse. BRIDGE was the pivot: song structure to crossing over.",
+            latHint:  "Think fingers and courage — not guitar strings.",
+            pivHint:  "You PLUCK a guitar string — but you also pluck up courage. What word means to pull or summon bravery?",
+            winText:  "Bravely done. CHORD was the pivot — strumming strings to plucking up courage.",
+            lossText: "PLUCK — courage or to pull. CHORD was the pivot: guitar strings to summoning bravery.",
         },
         "2026-06-21": {
             theme:    "TRAVEL",
-            words:    ["STAMP", "ROUTE", "LODGE", "CRUISE", "VISA", "PASSPORT", "TREK"],
+            words:    ["STAMP", "ROUTE", "LODGE", "VISA", "TREK", "FERRY", "HOTEL"],
             SIZE:     6,
             target:   "BRAND",
             pivot:    "STAMP",
@@ -947,7 +946,7 @@
         },
         "2026-06-22": {
             theme:    "AUTUMN",
-            words:    ["CRISP", "ACORN", "AMBER", "RUSTLE", "MIST", "HARVEST", "GOLDEN"],
+            words:    ["CRISP", "ACORN", "AMBER", "MISTY", "MAPLE", "BEECH", "TAWNY"],
             SIZE:     6,
             target:   "HONEY",
             pivot:    "AMBER",
@@ -971,7 +970,7 @@
         },
         "2026-06-24": {
             theme:    "SPACE",
-            words:    ["ORBIT", "COMET", "LUNAR", "PROBE", "NOVA", "PULSAR", "COSMOS"],
+            words:    ["ORBIT", "COMET", "LUNAR", "PROBE", "NOVA", "STAR", "DUST"],
             SIZE:     6,
             target:   "ROUND",
             pivot:    "ORBIT",
@@ -995,7 +994,7 @@
         },
         "2026-06-26": {
             theme:    "WEATHER",
-            words:    ["STORM", "FRONT", "SLEET", "FOGGY", "CLOUD", "HUMID", "DRIZZLE"],
+            words:    ["STORM", "FRONT", "SLEET", "FOGGY", "CLOUD", "HUMID", "GUSTY"],
             SIZE:     6,
             target:   "GUISE",
             pivot:    "FRONT",
@@ -1007,7 +1006,7 @@
         },
         "2026-06-27": {
             theme:    "LIBRARY",
-            words:    ["SHELF", "NOVEL", "INDEX", "SPINE", "PAGES", "BOUND", "CHAPTER"],
+            words:    ["SHELF", "NOVEL", "INDEX", "SPINE", "PAGES", "BOUND", "COVER"],
             SIZE:     6,
             target:   "NERVE",
             pivot:    "SPINE",
@@ -1019,7 +1018,7 @@
         },
         "2026-06-28": {
             theme:    "WINTER",
-            words:    ["FROST", "SKATE", "HOLLY", "SLEET", "CRISP", "FROZEN", "BLIZZARD"],
+            words:    ["FROST", "SKATE", "HOLLY", "SLEET", "CRISP", "POLAR", "SLUSH"],
             SIZE:     6,
             target:   "CHILL",
             pivot:    "FROST",
@@ -1031,19 +1030,19 @@
         },
         "2026-06-29": {
             theme:    "FARM",
-            words:    ["PLOUGH", "STABLE", "HARVEST", "FENCE", "CROPS", "BALES", "PASTURE"],
+            words:    ["FENCE", "CROPS", "BALES", "GRAIN", "FIELD", "HORSE", "SWINE"],
             SIZE:     6,
-            target:   "SOLID",
-            pivot:    "STABLE",
+            target:   "PIXEL",
+            pivot:    "GRAIN",
             noise:    "AEIOULNTSC",
-            latHint:  "Think strength and dependability — not horses.",
-            pivHint:  "STABLE houses animals — but it also means firm and reliable. What's the synonym?",
-            winText:  "Built to last. STABLE was the pivot — animal shelter to rock-solid dependability.",
-            lossText: "SOLID — firm and dependable. STABLE was the pivot: farm building to solid reliability.",
+            latHint:  "Think screens and images — not wheat.",
+            pivHint:  "GRAIN is the texture in a photo — and the smallest unit of a digital image. What's that unit called?",
+            winText:  "Picture perfect. GRAIN was the pivot — farmland texture to digital image unit.",
+            lossText: "PIXEL — the smallest unit of a digital image. GRAIN was the pivot: farm texture to screen detail.",
         },
         "2026-06-30": {
             theme:    "CITY",
-            words:    ["METRO", "TOWER", "PLAZA", "SMOG", "BLOCK", "SKYLINE", "TRAFFIC"],
+            words:    ["METRO", "TOWER", "PLAZA", "SMOG", "BLOCK", "CIVIC", "URBAN"],
             SIZE:     6,
             target:   "LOFTY",
             pivot:    "TOWER",
@@ -1055,7 +1054,7 @@
         },
         "2026-07-01": {
             theme:    "SCHOOL",
-            words:    ["CLASS", "STUDY", "CHALK", "RULER", "GRADE", "PENCIL", "LESSON"],
+            words:    ["CLASS", "STUDY", "CHALK", "RULER", "GRADE", "DESK", "EXAM"],
             SIZE:     6,
             target:   "REIGN",
             pivot:    "RULER",
@@ -1067,7 +1066,7 @@
         },
         "2026-07-02": {
             theme:    "CIRCUS",
-            words:    ["CLOWN", "JUGGLE", "TRAPEZE", "TENT", "TIGHTROPE", "ACROBAT", "PERFORM"],
+            words:    ["CLOWN", "TENT", "RINGS", "TAMER", "STUNT", "STRUT", "CROWD"],
             SIZE:     6,
             target:   "JOKER",
             pivot:    "CLOWN",
@@ -1079,7 +1078,7 @@
         },
         "2026-07-03": {
             theme:    "SLEEP",
-            words:    ["DREAM", "PILLOW", "DUVET", "SNORE", "DOZE", "DROWSY", "SLUMBER"],
+            words:    ["DREAM", "DUVET", "SNORE", "DOZE", "WOKEN", "LULL", "DAZE"],
             SIZE:     6,
             target:   "FLOAT",
             pivot:    "DOZE",
@@ -1091,19 +1090,19 @@
         },
         "2026-07-04": {
             theme:    "JUNGLE",
-            words:    ["VINES", "CANOPY", "JAGUAR", "DENSE", "HUMID", "PYTHON", "THICKET"],
+            words:    ["VINES", "DENSE", "HUMID", "TROOP", "CANOE", "TRIBE", "FROND"],
             SIZE:     6,
-            target:   "COVER",
-            pivot:    "CANOPY",
+            target:   "THICK",
+            pivot:    "DENSE",
             noise:    "AEISNROLMT",
-            latHint:  "Think protection and concealment — not treetops.",
-            pivHint:  "A CANOPY is a covering of treetops — what word simply means to conceal or protect?",
-            winText:  "Hidden beneath. CANOPY was the pivot — jungle roof to hiding under cover.",
-            lossText: "COVER — to conceal or protect. CANOPY was the pivot: treetop layer to hiding under cover.",
+            latHint:  "Think description — not jungle foliage.",
+            pivHint:  "A jungle is DENSE with trees — what single word means exactly the same thing?",
+            winText:  "Packed tight. DENSE was the pivot — jungle undergrowth to a simple synonym.",
+            lossText: "THICK — densely packed. DENSE was the pivot: jungle foliage to a simple synonym.",
         },
         "2026-07-05": {
             theme:    "SPORT",
-            words:    ["RELAY", "SPRINT", "TACKLE", "DRAFT", "FOUL", "SQUAD", "TROPHY"],
+            words:    ["RELAY", "DRAFT", "FOUL", "SQUAD", "COACH", "MATCH", "SCORE"],
             SIZE:     6,
             target:   "WINDS",
             pivot:    "DRAFT",
@@ -1127,19 +1126,19 @@
         },
         "2026-07-07": {
             theme:    "DESERT",
-            words:    ["MIRAGE", "DUNES", "CACTUS", "OASIS", "SCORCHED", "PARCHED", "LIZARD"],
+            words:    ["DUNES", "OASIS", "ARID", "SOLAR", "SANDY", "HARSH", "DRIED"],
             SIZE:     6,
-            target:   "TRICK",
-            pivot:    "MIRAGE",
+            target:   "HAVEN",
+            pivot:    "OASIS",
             noise:    "AEIOTNSLPC",
-            latHint:  "Think deception — not desert heat haze.",
-            pivHint:  "A MIRAGE looks real but isn't — what simple word means to deceive or fool someone?",
-            winText:  "Not what it seems. MIRAGE was the pivot — desert illusion to a cunning trick.",
-            lossText: "TRICK — to deceive or fool. MIRAGE was the pivot: desert illusion to clever deception.",
+            latHint:  "Think shelter and safety — not a desert spring.",
+            pivHint:  "An OASIS offers relief in the desert — what word means a place of safety and refuge?",
+            winText:  "Safe harbour. OASIS was the pivot — desert refuge to a haven of safety.",
+            lossText: "HAVEN — a place of safety. OASIS was the pivot: desert refuge to safe harbour.",
         },
         "2026-07-08": {
             theme:    "MARKET",
-            words:    ["HAGGLE", "VENDOR", "FRESH", "CROWD", "STALL", "BARTER", "BASKET"],
+            words:    ["FRESH", "CROWD", "STALL", "PRICE", "TRADE", "GOODS", "STORE"],
             SIZE:     6,
             target:   "DELAY",
             pivot:    "STALL",
@@ -1151,7 +1150,7 @@
         },
         "2026-07-09": {
             theme:    "THEATRE",
-            words:    ["STAGE", "CURTAIN", "PROMPT", "USHER", "DRAMA", "SCRIPT", "ENCORE"],
+            words:    ["STAGE", "USHER", "DRAMA", "SCENE", "PROPS", "ROLES", "INTRO"],
             SIZE:     6,
             target:   "PHASE",
             pivot:    "STAGE",
@@ -1163,7 +1162,7 @@
         },
         "2026-07-10": {
             theme:    "MOUNTAIN",
-            words:    ["RIDGE", "SUMMIT", "ASCENT", "CLIFF", "SLOPE", "GLACIER", "ALPINE"],
+            words:    ["RIDGE", "CLIFF", "SLOPE", "PEAK", "TRAIL", "ROCKY", "STEEP"],
             SIZE:     6,
             target:   "CREST",
             pivot:    "RIDGE",
@@ -1175,7 +1174,7 @@
         },
         "2026-07-11": {
             theme:    "RIVER",
-            words:    ["DELTA", "RAPIDS", "BANK", "CURRENT", "EDDY", "ESTUARY", "PEBBLE"],
+            words:    ["DELTA", "BANK", "EDDY", "FORD", "FLOW", "REEDS", "CREEK"],
             SIZE:     6,
             target:   "TRUST",
             pivot:    "BANK",
@@ -1187,7 +1186,7 @@
         },
         "2026-07-12": {
             theme:    "STARS",
-            words:    ["FLARE", "COMET", "PULSAR", "NEBULA", "NOVA", "QUASAR", "BINARY"],
+            words:    ["FLARE", "COMET", "NOVA", "LIGHT", "SHINE", "BEAM", "GLOW"],
             SIZE:     6,
             target:   "BLAZE",
             pivot:    "FLARE",
@@ -1199,17 +1198,19 @@
         },
         "2026-07-13": {
             theme:    "VILLAGE",
-            words:    ["COBBLE", "CHAPEL", "THATCH", "GREEN", "STEEPLE", "COTTAGE", "MEADOW"],
+            words:    ["GREEN", "STORE", "CREEK", "FENCE", "LANES", "BELLS", "PATCH"],
             SIZE:     6,
-            target:   "PATCH",
-            pivot:    "COBBLE",
+            target:   "CHIME",
+            pivot:    "BELLS",
             noise:    "AEIOTNSLPC",
-            latHint:  "Think quick repairs — not cobblestones.",
-            pivHint:  "To COBBLE something together is to patch it quickly — what word means to mend or repair?",
-            winText:  "Patched up nicely. COBBLE was the pivot — cobblestones to patching things together.",
-            lossText: "PATCH — to mend or repair. COBBLE was the pivot: cobbling stones to patching things up.",
+            latHint:  "Think sound and harmony — not church towers.",
+            pivHint:  "Village BELLS ring out — what word means to ring or sound in perfect tune?",
+            winText:  "In perfect harmony. BELLS was the pivot — village bells to a perfect chime.",
+            lossText: "CHIME — to ring in harmony. BELLS was the pivot: village bells to perfect sound.",
         },
     };
+    const today = new Date().toISOString().slice(0, 10);
+    const P = PUZZLES[today] || null;
     const today = new Date().toISOString().slice(0, 10);
     const P = PUZZLES[today] || null;
 
@@ -1826,12 +1827,9 @@
         slot.state = 'used';
         renderPool();
         renderGuessDisplay();
-        // Auto-submit if completed word matches target
         if (guessSlots.length === P.target.length) {
             const currentGuess = guessSlots.map(sid => pool.find(s => s.id === sid).l).join('');
-            if (currentGuess === P.target) {
-                setTimeout(doSubmit, 300);
-            }
+            if (currentGuess === P.target) { setTimeout(doSubmit, 300); }
         }
     }
 
@@ -2310,48 +2308,29 @@
         updateHintCostLabel();
     }
     function showNoPuzzle() {
-        document.body.innerHTML = `
-            <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;
-                background:linear-gradient(160deg,#0d3349 0%,#1a5276 55%,#0d3349 100%);
-                font-family:Georgia,serif;color:#f0ede6;text-align:center;padding:24px;">
-                <div>
-                    <div style="font-size:28px;color:#f9d976;letter-spacing:3px;margin-bottom:12px;">PIVOT</div>
-                    <div style="font-size:16px;color:#a8c8e8;margin-bottom:8px;">No puzzle today — check back tomorrow!</div>
-                </div>
-            </div>`;
+        document.body.innerHTML = `<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#0d3349 0%,#1a5276 55%,#0d3349 100%);font-family:Georgia,serif;color:#f0ede6;text-align:center;padding:24px;"><div><div style="font-size:28px;color:#f9d976;letter-spacing:3px;margin-bottom:12px;">PIVOT</div><div style="font-size:16px;color:#a8c8e8;">No puzzle today — check back tomorrow!</div></div></div>`;
     }
-
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function() {
-            if (!P || !P.theme) { showNoPuzzle(); return; }
-            initGame();
-        });
+        document.addEventListener('DOMContentLoaded', function() { if (!P || !P.theme) { showNoPuzzle(); return; } initGame(); });
     } else {
-        if (!P || !P.theme) { showNoPuzzle(); }
-        else { initGame(); }
+        if (!P || !P.theme) { showNoPuzzle(); } else { initGame(); }
     }
     window.addEventListener('resize', renderGrid);
     </script>
-    <!-- ── INTRO MODAL ──────────────────────────────────────────────────────── -->
     <div id="intro-modal">
         <div class="intro-box">
-            <div class="intro-title-row">
-                <span class="intro-game-name">PIVOT</span>
-                <span class="intro-sub">· HOW TO PLAY</span>
-            </div>
+            <div class="intro-title-row"><span class="intro-game-name">PIVOT</span><span class="intro-sub">· HOW TO PLAY</span></div>
             <div class="intro-layout">
                 <div class="intro-left">
                     <p class="intro-grid-label">Word Search</p>
-                    <div class="intro-grid-frame">
-                        <div class="intro-mini-grid">
-                            <div class="imc">K</div><div class="imc found">S</div><div class="imc found">H</div><div class="imc found">E</div><div class="imc found">L</div><div class="imc found">L</div>
-                            <div class="imc">T</div><div class="imc">D</div><div class="imc">N</div><div class="imc">B</div><div class="imc">I</div><div class="imc">P</div>
-                            <div class="imc pivot">C</div><div class="imc pivot">O</div><div class="imc pivot">R</div><div class="imc pivot">A</div><div class="imc pivot">L</div><div class="imc found2">W</div>
-                            <div class="imc">U</div><div class="imc">F</div><div class="imc">M</div><div class="imc">G</div><div class="imc">Y</div><div class="imc found2">A</div>
-                            <div class="imc">J</div><div class="imc">X</div><div class="imc">E</div><div class="imc">N</div><div class="imc">R</div><div class="imc found2">V</div>
-                            <div class="imc">B</div><div class="imc">I</div><div class="imc">O</div><div class="imc">T</div><div class="imc">S</div><div class="imc found2">E</div>
-                        </div>
-                    </div>
+                    <div class="intro-grid-frame"><div class="intro-mini-grid">
+                        <div class="imc">K</div><div class="imc found">S</div><div class="imc found">H</div><div class="imc found">E</div><div class="imc found">L</div><div class="imc found">L</div>
+                        <div class="imc">T</div><div class="imc">D</div><div class="imc">N</div><div class="imc">B</div><div class="imc">I</div><div class="imc">P</div>
+                        <div class="imc pivot">C</div><div class="imc pivot">O</div><div class="imc pivot">R</div><div class="imc pivot">A</div><div class="imc pivot">L</div><div class="imc found2">W</div>
+                        <div class="imc">U</div><div class="imc">F</div><div class="imc">M</div><div class="imc">G</div><div class="imc">Y</div><div class="imc found2">A</div>
+                        <div class="imc">J</div><div class="imc">X</div><div class="imc">E</div><div class="imc">N</div><div class="imc">R</div><div class="imc found2">V</div>
+                        <div class="imc">B</div><div class="imc">I</div><div class="imc">O</div><div class="imc">T</div><div class="imc">S</div><div class="imc found2">E</div>
+                    </div></div>
                     <div style="margin-bottom:8px;">
                         <p class="intro-section-label">Complete the word search<br>to reduce letter inventory</p>
                         <div class="intro-pool-row"><div class="imp">A</div><div class="imp">B</div><div class="imp">E</div><div class="imp">I</div><div class="imp">M</div></div>
@@ -2366,39 +2345,17 @@
                 </div>
                 <div class="intro-steps">
                     <div class="intro-step-gap"></div>
-                    <div class="intro-step">
-                        <div class="intro-step-header">
-                            <div class="intro-snum" style="background:#2ecc71;color:#fff;">1</div>
-                            <span style="font-size:13px;font-weight:bold;color:#2ecc71;">FIND THE WORDS</span>
-                        </div>
-                        <p>Play a word search to find the <strong>PIVOT WORD</strong>.</p>
-                    </div>
-                    <div class="intro-step-gap"></div>
-                    <div class="intro-step-gap"></div>
-                    <div class="intro-step">
-                        <div class="intro-step-header">
-                            <div class="intro-snum" style="background:#e8734a;color:#fff;">2</div>
-                            <span style="font-size:13px;font-weight:bold;color:#e8734a;">CRACK THE PIVOT</span>
-                        </div>
-                        <p>The <strong>PIVOT WORD</strong> appears in orange and unlocks a clue.</p>
-                    </div>
-                    <div class="intro-step-gap"></div>
-                    <div class="intro-step-gap"></div>
-                    <div class="intro-step">
-                        <div class="intro-step-header">
-                            <div class="intro-snum" style="background:rgba(255,255,255,0.2);color:#fff;">3</div>
-                            <span style="font-size:13px;font-weight:bold;color:#fff;">GUESS THE WORD</span>
-                        </div>
-                        <p>Play like Wordle to find the word of the day.</p>
-                    </div>
+                    <div class="intro-step"><div class="intro-step-header"><div class="intro-snum" style="background:#2ecc71;color:#fff;">1</div><span style="font-size:13px;font-weight:bold;color:#2ecc71;">FIND THE WORDS</span></div><p>Play a word search to find the <strong>PIVOT WORD</strong>.</p></div>
+                    <div class="intro-step-gap"></div><div class="intro-step-gap"></div>
+                    <div class="intro-step"><div class="intro-step-header"><div class="intro-snum" style="background:#e8734a;color:#fff;">2</div><span style="font-size:13px;font-weight:bold;color:#e8734a;">CRACK THE PIVOT</span></div><p>The <strong>PIVOT WORD</strong> appears in orange and unlocks a clue.</p></div>
+                    <div class="intro-step-gap"></div><div class="intro-step-gap"></div>
+                    <div class="intro-step"><div class="intro-step-header"><div class="intro-snum" style="background:rgba(255,255,255,0.2);color:#fff;">3</div><span style="font-size:13px;font-weight:bold;color:#fff;">GUESS THE WORD</span></div><p>Play like Wordle to find the word of the day.</p></div>
                 </div>
             </div>
             <p class="intro-tap-hint">tap anywhere to start playing →</p>
         </div>
     </div>
-
     <script>
-    // ── INTRO MODAL (first-time players only) ────────────────────────────────
     (function() {
         const SEEN_KEY = 'pivot_seen_intro';
         const modal = document.getElementById('intro-modal');
@@ -2411,6 +2368,5 @@
         }
     })();
     </script>
-
 </body>
 </html>
