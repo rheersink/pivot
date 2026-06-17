@@ -378,6 +378,24 @@
         text-decoration: line-through;
     }
 
+    .pcard-top.correct {
+        background: #2ecc71;
+        border-color: #27ae60;
+        color: #fff;
+    }
+
+    .pcard-top.present {
+        background: #f39c12;
+        border-color: #e67e22;
+        color: #fff;
+    }
+
+    .pcard-top.absent {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.25);
+        color: rgba(255, 255, 255, 0.5);
+    }
+
     .pcount {
         position: absolute;
         top: -5px;
@@ -1169,6 +1187,46 @@
         return res;
     }
 
+    function letterColorPlan() {
+        // For each letter, take the best (highest) correct-count and the best
+        // (highest) correct+present total seen across ALL past guesses,
+        // tracked independently — so if one guess shows a letter as "present"
+        // and a later guess proves the same letter "correct", the correct
+        // reading wins rather than getting stuck on the earlier, weaker one.
+        const maxKnown = {}, maxCorrect = {}, fullyAbsent = {};
+        pastGuesses.forEach(gu => {
+            const counts = {};
+            gu.letters.forEach((l, i) => {
+                if (!counts[l])
+                    counts[l] = { correct: 0, present: 0 };
+                if (gu.results[i] === 'correct')
+                    counts[l].correct++;
+                else if (gu.results[i] === 'present')
+                    counts[l].present++;
+            });
+            Object.entries(counts).forEach(([l, c]) => {
+                const known = c.correct + c.present;
+                if (known === 0) {
+                    fullyAbsent[l] = true;
+                } else {
+                    maxKnown[l] = Math.max(maxKnown[l] || 0, known);
+                    maxCorrect[l] = Math.max(maxCorrect[l] || 0, c.correct);
+                }
+            });
+        });
+        const plan = {};
+        new Set([...Object.keys(maxKnown), ...Object.keys(fullyAbsent)]).forEach(l => {
+            if (maxKnown[l]) {
+                // positive evidence (correct/present) always wins over an absent reading
+                const green = maxCorrect[l] || 0;
+                plan[l] = { green, yellow: maxKnown[l] - green, fullyAbsent: false };
+            } else {
+                plan[l] = { green: 0, yellow: 0, fullyAbsent: true };
+            }
+        });
+        return plan;
+    }
+
     // ── CELL SIZE ─────────────────────────────────────────────────────────────────
     function cellPx() {
         const avail = Math.min(window.innerWidth, 480) - 20 - 24 - 14;
@@ -1434,6 +1492,8 @@
         const isFull = guessSlots.length >= P.target.length;
         // Render one tile per pool slot
         const sorted = [...pool].sort((a, b) => a.l.localeCompare(b.l));
+        const plan = letterColorPlan();
+        const used = {}; // letter -> { green, yellow } tiles already colored so far
         sorted.forEach(slot => {
             const tile = document.createElement('div');
             const isElim = slot.state === 'elim';
@@ -1446,6 +1506,25 @@
             const top = document.createElement('div');
             top.className = 'pcard-top';
             top.textContent = slot.l;
+            const lp = plan[slot.l];
+            if (lp) {
+                if (lp.fullyAbsent) {
+                    top.classList.add('absent');
+                } else {
+                    if (!used[slot.l])
+                        used[slot.l] = { green: 0, yellow: 0 };
+                    const u = used[slot.l];
+                    if (u.green < lp.green) {
+                        top.classList.add('correct');
+                        u.green++;
+                    } else if (u.yellow < lp.yellow) {
+                        top.classList.add('present');
+                        u.yellow++;
+                    }
+                    // any remaining copies beyond the confirmed count stay neutral —
+                    // we don't yet know if the target has more than that
+                }
+            }
             tile.appendChild(top);
             if (isAvail && !isFull) {
                 tile.dataset.letter = slot.l;
