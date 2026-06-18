@@ -737,7 +737,7 @@
         <span id="sbpts" style="color:#f9d976;font-weight:bold;font-size:16px;font-family:Georgia,serif;"></span>
     </div>
     <div id="header">
-        <p class="eyebrow">DAILY PUZZLE <span style="opacity:0.5;font-size:8px;letter-spacing:1px;">v1.18</span></p>
+        <p class="eyebrow">DAILY PUZZLE <span style="opacity:0.5;font-size:8px;letter-spacing:1px;">v1.23</span></p>
         <h1>PIVOT<span style="color:#a8c8e8;font-size:16px;letter-spacing:2px;font-weight:normal;"> : </span><span id="theme-label" style="color:#fff;font-size:20px;letter-spacing:4px;">…</span></h1>
         <div class="badge-row">
             <span class="pts-badge" id="pts">⏱ 0:00</span>
@@ -1104,6 +1104,8 @@
         foundKeys = new Set(),
         pivotCellKeys = new Set();
     let foundOrder = []; // tracks Part 1 words in the order they were found
+    let p1EventLog = [], // chronological log of Part 1 word-found / hint-used events, for score report line breaks
+        p2EventLog = []; // chronological log of Part 2 guess-submitted / hint-used events, same purpose
     let selCells = [],
         hintKeys = new Set();
     let hintCount = 0; // total hints used across both stages — escalating cost
@@ -1112,7 +1114,8 @@
     let guessSlots = [],
         pastGuesses = [],
         usedLat = false,
-        usedPiv = false;
+        usedPiv = false,
+        p2HintLocked = false; // true once a hint's been used since the last guess — blocks another until you guess again
     // Timer
     let timerStart = null,
         timerInterval = null,
@@ -1367,6 +1370,7 @@
             }
             foundWords.add(w);
             foundOrder.push(w); // record order found for share report
+            p1EventLog.push({ type: 'word', pivot: w === P.pivot });
             p.cells.forEach(([rr, cc]) => foundKeys.add(ck(rr, cc)));
             if (w === P.pivot) {
                 p.cells.forEach(([rr, cc]) => pivotCellKeys.add(ck(rr, cc)));
@@ -1419,6 +1423,7 @@
         const hintable = unfound.filter(w => w !== P.pivot);
         const candidates = hintable.length > 0 ? hintable : unfound;
         const cost = addHintPenalty();
+        p1EventLog.push({ type: 'hint' });
         const w = candidates[Math.floor(Math.random() * candidates.length)];
         const p = placements[w];
         // Find the cell that contains the first letter of the word
@@ -1697,6 +1702,8 @@
             letters: guess.split(''),
             results
         });
+        p2EventLog.push({ type: 'guess' });
+        p2HintLocked = false;
         guessSlots.forEach(id => {
             const s = pool.find(x => x.id === id);
             if (s)
@@ -1758,7 +1765,10 @@
                 pivotCellKeys: Array.from(pivotCellKeys),
                 hintKeys: Array.from(hintKeys),
                 foundWords: Array.from(foundWords),
-                foundOrder: foundOrder
+                foundOrder: foundOrder,
+                p1HintPenalty: p1HintPenalty,
+                p1EventLog: p1EventLog,
+                p2EventLog: p2EventLog
             }));
         } catch (e) {
             // storage unavailable — nothing to do
@@ -1818,7 +1828,13 @@
     tap('latbtn', function() {
         if (usedLat)
             return;
+        if (p2HintLocked) {
+            flash('One hint per guess — try a guess first', 'er');
+            return;
+        }
         const cost = addHintPenalty();
+        p2EventLog.push({ type: 'hint' });
+        p2HintLocked = true;
         usedLat = true;
         document.getElementById('latbtn').disabled = true;
         document.getElementById('hcard2').classList.remove('hidden');
@@ -1831,7 +1847,13 @@
     tap('pivbtn', function() {
         if (usedPiv)
             return;
+        if (p2HintLocked) {
+            flash('One hint per guess — try a guess first', 'er');
+            return;
+        }
         const cost = addHintPenalty();
+        p2EventLog.push({ type: 'hint' });
+        p2HintLocked = true;
         usedPiv = true;
         document.getElementById('pivbtn').disabled = true;
         document.getElementById('hcard2').classList.remove('hidden');
@@ -1847,7 +1869,13 @@
             flash('Nothing to eliminate', 'er');
             return;
         }
+        if (p2HintLocked) {
+            flash('One hint per guess — try a guess first', 'er');
+            return;
+        }
         const cost = addHintPenalty();
+        p2EventLog.push({ type: 'hint' });
+        p2HintLocked = true;
         const pick = safe[Math.floor(Math.random() * safe.length)];
         pick.state = 'elim';
         renderPool();
@@ -1978,32 +2006,44 @@
     // ── SHARE ─────────────────────────────────────────────────────────────────────
     function buildShareText() {
         const total = elapsedSecs + hintPenalty;
-        const p2HintPenalty = hintPenalty - p1HintPenalty;
-        const noHints = hintPenalty === 0;
+        const timeStr = '⏱ ' + fmtTime(total);
 
-        let timeStr = '⏱ ' + fmtTime(total);
-        if (noHints) {
-            timeStr += ' — no hints 🎉';
-        } else {
-            const base = elapsedSecs;
-            timeStr += ' (' + fmtTime(base) + ' + ' + fmtTime(p1HintPenalty) + '/' + fmtTime(p2HintPenalty) + ' hints)';
-        }
-
-        // Part 1: circles in order found, magnifying glass for each unfound word
+        // Part 1: one continuous line — circles in order found, with an ℹ️
+        // inserted right where each hint was taken, magnifying glass for any
+        // words never found tacked onto the end.
         const totalWords = P.words.length;
         let p1Emoji = '';
-        for (let i = 0; i < foundOrder.length; i++) {
-            p1Emoji += foundOrder[i] === P.pivot ? '🟠' : '🟢';
-        }
+        p1EventLog.forEach(ev => {
+            if (ev.type === 'word') {
+                p1Emoji += ev.pivot ? '🟠' : '🟢';
+            } else if (ev.type === 'hint') {
+                p1Emoji += 'ℹ️';
+            }
+        });
         const unfoundCount = totalWords - foundOrder.length;
         for (let i = 0; i < unfoundCount; i++) {
             p1Emoji += '🔍';
         }
 
-        // Part 2: one row per guess
-        const guessEmoji = pastGuesses.map(g =>
-            g.results.map(r => r === 'correct' ? '🟩' : r === 'present' ? '🟨' : '⬛').join('')
-        ).join('\n');
+        // Part 2: one row per guess, with an ℹ️ (or a same-width blank, so
+        // the squares stay aligned in a column) prepended to whichever
+        // guess-row comes right after a hint was taken.
+        let p2GuessIdx = 0;
+        let p2PendingHint = false;
+        const p2Lines = [];
+        const BLANK = '　'; // full-width blank space — same visual width as the emoji
+        p2EventLog.forEach(ev => {
+            if (ev.type === 'guess') {
+                const g = pastGuesses[p2GuessIdx++];
+                const marker = p2PendingHint ? 'ℹ️' : BLANK;
+                p2Lines.push(marker + g.results.map(r => r === 'correct' ? '🟩' : r === 'present' ? '🟨' : '⬛').join(''));
+                p2PendingHint = false;
+            } else if (ev.type === 'hint') {
+                p2PendingHint = true;
+            }
+        });
+        if (p2PendingHint) p2Lines.push('ℹ️'); // hint taken after the last guess (shouldn't normally happen, but don't drop it)
+        const guessEmoji = p2Lines.join('\n');
 
         return 'PIVOT — ' + P.theme + '\n' + timeStr + '\n' + p1Emoji + '\n' + guessEmoji + '\nhttps://tinyurl.com/pivot-en';
     }
@@ -2169,6 +2209,9 @@
         pastGuesses = saved.pastGuesses || [];
         elapsedSecs = saved.elapsedSecs || 0;
         hintPenalty = saved.hintPenalty || 0;
+        p1HintPenalty = saved.p1HintPenalty || 0;
+        p1EventLog = saved.p1EventLog || [];
+        p2EventLog = saved.p2EventLog || [];
         gameOver = true;
 
         // Restore Part 1's board exactly as it was found, if we have it saved
