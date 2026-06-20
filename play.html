@@ -755,6 +755,7 @@
         </div>
         <div class="card" id="gcard">
             <div id="grows"></div>
+            <p class="slabel" id="guess-counter"></p>
             <div id="guess-display"></div>
 
         </div>
@@ -1079,6 +1080,7 @@
         usedPiv = false,
         p2HintLocked = false; // true once a hint's been used since the last guess — blocks another until you guess again
     let gameStarted = false;
+    const MAX_GUESSES = 4;
 
     // ── HELPERS ───────────────────────────────────────────────────────────────────
     function ck(r, c) {
@@ -1421,7 +1423,7 @@
         if (instrCard)
             instrCard.style.display = 'block';
         if (instrEl) {
-            let txt = "It is related to <strong>" + P.pivot + "</strong>.";
+            let txt = "It is related to <strong>" + P.pivot + "</strong>. You have " + MAX_GUESSES + " guesses to find it.";
             if (jumpedEarly && !wordSearchDone)
                 txt += "<br>Reduce the letter pool by finding more words above.";
             instrEl.innerHTML = txt;
@@ -1537,6 +1539,11 @@
     }
 
     function renderGuessDisplay() {
+        const counter = document.getElementById('guess-counter');
+        if (counter) {
+            const guessNum = Math.min(pastGuesses.length + 1, MAX_GUESSES);
+            counter.textContent = 'Guess ' + guessNum + ' of ' + MAX_GUESSES;
+        }
         const wrap = document.getElementById('guess-display');
         wrap.innerHTML = '';
         guessSlots.forEach((id, i) => {
@@ -1638,7 +1645,7 @@
             showWin();
             return;
         }
-        if (pastGuesses.length >= 6) {
+        if (pastGuesses.length >= MAX_GUESSES) {
             gameOver = true;
             showLoss();
         }
@@ -1714,7 +1721,13 @@
         document.getElementById('lossword').textContent = 'The word was ' + P.target;
         const hints = totalHintsUsed();
         document.getElementById('losstext').textContent = P.lossText + (hints > 0 ? ' (' + hints + (hints === 1 ? ' hint' : ' hints') + ' used)' : '');
-        setTimeout(showSharePrompt, 1200);
+        setTimeout(() => {
+            document.getElementById('losscard').scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
+            setTimeout(() => launchRain(3500), 600);
+        }, 300);
     }
 
     // ── HINT BUTTONS ─────────────────────────────────────────────────────────────
@@ -1906,6 +1919,67 @@
         animate();
         setTimeout(() => {
             clearInterval(burstInterval);
+            setTimeout(() => {
+                canvas.style.display = 'none';
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                showSharePrompt();
+            }, 1200);
+        }, durationMs);
+    }
+
+    // ── LOSS RAIN ────────────────────────────────────────────────────────────────
+    function launchRain(durationMs) {
+        const canvas = document.getElementById('fwcanvas');
+        canvas.style.display = 'block';
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const ctx = canvas.getContext('2d');
+        const drops = [];
+        function Drop() {
+            this.x = Math.random() * canvas.width;
+            this.y = -10;
+            this.len = 10 + Math.random() * 14;
+            this.vy = 2 + Math.random() * 2;
+            this.vx = -0.3 + Math.random() * 0.6;
+            this.alpha = 0.22 + Math.random() * 0.22;
+        }
+        Drop.prototype.update = function() {
+            this.x += this.vx;
+            this.y += this.vy;
+        };
+        Drop.prototype.draw = function() {
+            ctx.save();
+            ctx.globalAlpha = this.alpha;
+            ctx.strokeStyle = '#a8c8e8';
+            ctx.lineWidth = 1.5;
+            ctx.lineCap = 'round';
+            ctx.beginPath();
+            ctx.moveTo(this.x, this.y);
+            ctx.lineTo(this.x + this.vx * 3, this.y - this.len);
+            ctx.stroke();
+            ctx.restore();
+        };
+        let elapsed = 0;
+        const spawnInterval = setInterval(() => {
+            drops.push(new Drop());
+            if (Math.random() > 0.5)
+                drops.push(new Drop());
+        }, 250);
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = drops.length - 1; i >= 0; i--) {
+                drops[i].update();
+                drops[i].draw();
+                if (drops[i].y - drops[i].len > canvas.height)
+                    drops.splice(i, 1);
+            }
+            if (elapsed < durationMs)
+                requestAnimationFrame(animate);
+            elapsed += 16;
+        }
+        animate();
+        setTimeout(() => {
+            clearInterval(spawnInterval);
             setTimeout(() => {
                 canvas.style.display = 'none';
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -2157,6 +2231,7 @@
         }
 
         renderPastGuesses();
+        renderGuessDisplay();
         if (saved.won) showWin(); else showLoss();
     }
 
