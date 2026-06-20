@@ -1423,7 +1423,7 @@
         if (instrCard)
             instrCard.style.display = 'block';
         if (instrEl) {
-            let txt = "It is related to <strong>" + P.pivot + "</strong>. You have " + MAX_GUESSES + " guesses to find it.";
+            let txt = "It is related to <strong>" + P.pivot + "</strong>. You have " + MAX_GUESSES + " guesses.";
             if (jumpedEarly && !wordSearchDone)
                 txt += "<br>Reduce the letter pool by finding more words above.";
             instrEl.innerHTML = txt;
