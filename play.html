@@ -2045,13 +2045,13 @@
         const p2Guesses = p2EventLog.filter(e => e.type === 'guess').length;
         let performanceLine = '';
         if (hints === 0) {
-            performanceLine = 'No hints used. 🎉 🥳 😎 👌';
+            performanceLine = 'No hints used. \n🎉 🥳 😎 👌';
         } else if (hints === 1) {
-            performanceLine = 'Only 1 hint used. 🥳 🤓';
+            performanceLine = 'Only 1 hint used. \n🥳 🤓';
         } else if (hints === 2) {
-            performanceLine = 'Just 2 hints used. 😊';
+            performanceLine = 'Just 2 hints used. \n😊';
         } else if (hints >= 3 && p2Guesses >= 4) {
-            performanceLine = 'Phew! I made it!! 😅';
+            performanceLine = 'Phew! I made it!! \n😅';
         }
         const perfSuffix = performanceLine ? '\n' + performanceLine : '';
         return 'PIVOT — ' + P.theme + perfSuffix + '\n' + p1Emoji + '\n' + guessEmoji  + '\nhttps://tinyurl.com/pivot-en';
