@@ -679,6 +679,22 @@
         cursor: pointer;
     }
 
+    #summarybox .sum-intro {
+        color: #a8c8e8;
+        font-size: 12px;
+        margin: -8px 0 12px;
+        font-style: italic;
+    }
+    #summarybox .sum-notnow {
+        margin-top: 10px;
+        color: #607a8a;
+        font-size: 12px;
+        text-decoration: underline;
+        cursor: pointer;
+    }
+    #summarybox .sum-notnow:hover {
+        color: #a8c8e8;
+    }
     #shareoverlay {
         position: fixed;
         inset: 0;
@@ -852,8 +868,9 @@
     </canvas>
     <div id="summaryoverlay">
         <div id="summarybox">
-            <div class="sum-success">SUCCESS</div>
+            <div class="sum-success" id="sum-heading">SUCCESS!</div>
             <div class="sum-target" id="sum-target"></div>
+            <div class="sum-intro">Here is a game summary of the hints and conclusion:</div>
             <div class="sum-section" id="sum-hint1-block">
                 <div class="sum-label">🔀 Lateral hint</div>
                 <div id="sum-hint1-text"></div>
@@ -867,6 +884,7 @@
                 <div id="sum-wintext"></div>
             </div>
             <button class="sum-closebtn" id="sum-closebtn">Share my result →</button>
+            <div class="sum-notnow" id="sum-notnow">not now</div>
         </div>
     </div>
     <div id="shareoverlay">
@@ -2203,15 +2221,16 @@
             setTimeout(() => {
                 canvas.style.display = 'none';
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                showSummaryPanel();
+                showSummaryPanel(true);
             }, 600);
         }, halfDuration);
     }
 
     // ── WIN SUMMARY PANEL ─────────────────────────────────────────────────────────
-    function showSummaryPanel() {
-        // Populate target word
-        document.getElementById('sum-target').textContent = P.target;
+    function showSummaryPanel(won) {
+        // Heading and target line
+        document.getElementById('sum-heading').textContent = won ? 'SUCCESS!' : 'Almost, but not quite...';
+        document.getElementById('sum-target').textContent = 'Today\'s word was "' + P.target + '"';
 
         // Lateral hint — show with dim style if player didn't use it
         const h1text = document.getElementById('sum-hint1-text');
@@ -2298,7 +2317,7 @@
             setTimeout(() => {
                 canvas.style.display = 'none';
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                showSharePrompt();
+                showSummaryPanel(false);
             }, 1200);
         }, durationMs);
     }
@@ -2377,6 +2396,9 @@
         addTap('sum-closebtn', function() {
             document.getElementById('summaryoverlay').style.display = 'none';
             showSharePrompt();
+        });
+        addTap('sum-notnow', function() {
+            document.getElementById('summaryoverlay').style.display = 'none';
         });
     })();
     (function() {
