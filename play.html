@@ -608,6 +608,77 @@
         display: none;
     }/* Share */
 
+    #summaryoverlay {
+        position: fixed;
+        inset: 0;
+        z-index: 2001;
+        background: rgba(0, 0, 0, 0.82);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+    #summarybox {
+        background: linear-gradient(160deg, #0d3349, #1a5276);
+        border: 1px solid rgba(249, 217, 118, 0.5);
+        border-radius: 16px;
+        padding: 24px 20px 20px;
+        max-width: 340px;
+        width: 100%;
+        text-align: center;
+        position: relative;
+        z-index: 2002;
+    }
+    #summarybox .sum-success {
+        color: #f9d976;
+        font-size: 22px;
+        font-weight: bold;
+        letter-spacing: 3px;
+        margin: 0 0 6px;
+    }
+    #summarybox .sum-target {
+        color: #fff;
+        font-size: 26px;
+        font-weight: bold;
+        margin: 0 0 16px;
+    }
+    #summarybox .sum-section {
+        background: rgba(255,255,255,0.07);
+        border-radius: 10px;
+        padding: 10px 14px;
+        margin-bottom: 10px;
+        text-align: left;
+        font-size: 13px;
+        color: #d4eaf7;
+        line-height: 1.55;
+    }
+    #summarybox .sum-label {
+        color: #a8c8e8;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 3px;
+        font-weight: bold;
+    }
+    #summarybox .sum-unused {
+        color: #607a8a;
+        font-style: italic;
+    }
+    #summarybox .sum-closebtn {
+        display: block;
+        width: 100%;
+        margin-top: 16px;
+        padding: 13px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #f9d976, #e6b800);
+        color: #1a3a1a;
+        font-family: Georgia, serif;
+        font-size: 15px;
+        font-weight: bold;
+        border: none;
+        cursor: pointer;
+    }
+
     #shareoverlay {
         position: fixed;
         inset: 0;
@@ -779,6 +850,25 @@
     <p class="footer">PIVOT · DAILY PUZZLE</p>
     <canvas id="fwcanvas">
     </canvas>
+    <div id="summaryoverlay">
+        <div id="summarybox">
+            <div class="sum-success">SUCCESS</div>
+            <div class="sum-target" id="sum-target"></div>
+            <div class="sum-section" id="sum-hint1-block">
+                <div class="sum-label">🔀 Lateral hint</div>
+                <div id="sum-hint1-text"></div>
+            </div>
+            <div class="sum-section" id="sum-hint2-block">
+                <div class="sum-label">🪸 Pivot hint</div>
+                <div id="sum-hint2-text"></div>
+            </div>
+            <div class="sum-section">
+                <div class="sum-label">💡 The connection</div>
+                <div id="sum-wintext"></div>
+            </div>
+            <button class="sum-closebtn" id="sum-closebtn">Share my result →</button>
+        </div>
+    </div>
     <div id="shareoverlay">
         <div id="sharebox">
             <h3>Share your result?</h3>
@@ -2106,14 +2196,50 @@
             elapsed += 16;
         }
         animate();
+        // Fireworks run for half the requested duration, then summary panel appears
+        const halfDuration = Math.round(durationMs / 2);
         setTimeout(() => {
             clearInterval(burstInterval);
             setTimeout(() => {
                 canvas.style.display = 'none';
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                showSharePrompt();
-            }, 1200);
-        }, durationMs);
+                showSummaryPanel();
+            }, 600);
+        }, halfDuration);
+    }
+
+    // ── WIN SUMMARY PANEL ─────────────────────────────────────────────────────────
+    function showSummaryPanel() {
+        // Populate target word
+        document.getElementById('sum-target').textContent = P.target;
+
+        // Lateral hint — show with dim style if player didn't use it
+        const h1text = document.getElementById('sum-hint1-text');
+        if (usedLat) {
+            h1text.textContent = P.latHint;
+            h1text.classList.remove('sum-unused');
+        } else {
+            h1text.textContent = P.latHint;
+            h1text.classList.add('sum-unused');
+            document.getElementById('sum-hint1-block').title = 'You didn\'t use this hint';
+        }
+
+        // Pivot hint — show with dim style if player didn't use it
+        const h2text = document.getElementById('sum-hint2-text');
+        if (usedPiv) {
+            h2text.textContent = P.pivHint;
+            h2text.classList.remove('sum-unused');
+        } else {
+            h2text.textContent = P.pivHint;
+            h2text.classList.add('sum-unused');
+            document.getElementById('sum-hint2-block').title = 'You didn\'t use this hint';
+        }
+
+        // Closing explanation
+        document.getElementById('sum-wintext').textContent = P.winText;
+
+        // Show the panel
+        document.getElementById('summaryoverlay').style.display = 'flex';
     }
 
     // ── LOSS RAIN ────────────────────────────────────────────────────────────────
@@ -2240,6 +2366,19 @@
     function closeShare() {
         document.getElementById('shareoverlay').style.display = 'none';
     }
+    // Summary panel close → open share
+    (function() {
+        function addTap(id, fn) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.addEventListener('touchend', function(e) { e.preventDefault(); e.stopPropagation(); fn(); }, { passive: false });
+            el.addEventListener('click', function(e) { e.preventDefault(); e.stopPropagation(); fn(); });
+        }
+        addTap('sum-closebtn', function() {
+            document.getElementById('summaryoverlay').style.display = 'none';
+            showSharePrompt();
+        });
+    })();
     (function() {
         function addTapShare(id, fn) {
             const el = document.getElementById(id);
