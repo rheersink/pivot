@@ -636,6 +636,10 @@
         letter-spacing: 3px;
         margin: 0 0 4px;
     }
+    #summarybox .sum-success.sum-loss {
+        font-size: 17px;
+        letter-spacing: 1px;
+    }
     #summarybox .sum-target-label {
         color: #a8c8e8;
         font-size: 13px;
@@ -2236,32 +2240,14 @@
     // ── WIN SUMMARY PANEL ─────────────────────────────────────────────────────────
     function showSummaryPanel(won) {
         // Heading and target line
-        document.getElementById('sum-heading').textContent = won ? 'SUCCESS!' : 'Almost, but not quite...';
+        const heading = document.getElementById('sum-heading');
+        heading.textContent = won ? 'SUCCESS!' : 'Almost, but not quite...';
+        heading.classList.toggle('sum-loss', !won);
         document.getElementById('sum-target').textContent = P.target;
 
-        // Lateral hint — show with dim style if player didn't use it
-        const h1text = document.getElementById('sum-hint1-text');
-        if (usedLat) {
-            h1text.textContent = P.latHint;
-            h1text.classList.remove('sum-unused');
-        } else {
-            h1text.textContent = P.latHint;
-            h1text.classList.add('sum-unused');
-            document.getElementById('sum-hint1-block').title = 'You didn\'t use this hint';
-        }
-
-        // Pivot hint — show with dim style if player didn't use it
-        const h2text = document.getElementById('sum-hint2-text');
-        if (usedPiv) {
-            h2text.textContent = P.pivHint;
-            h2text.classList.remove('sum-unused');
-        } else {
-            h2text.textContent = P.pivHint;
-            h2text.classList.add('sum-unused');
-            document.getElementById('sum-hint2-block').title = 'You didn\'t use this hint';
-        }
-
-        // Closing explanation
+        // All three boxes in uniform style — no dimming for unused hints
+        document.getElementById('sum-hint1-text').textContent = P.latHint;
+        document.getElementById('sum-hint2-text').textContent = P.pivHint;
         document.getElementById('sum-wintext').textContent = P.winText;
 
         // Show the panel
@@ -2319,14 +2305,15 @@
             elapsed += 16;
         }
         animate();
+        const halfDuration = Math.round(durationMs / 2);
         setTimeout(() => {
             clearInterval(spawnInterval);
             setTimeout(() => {
                 canvas.style.display = 'none';
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 showSummaryPanel(false);
-            }, 1200);
-        }, durationMs);
+            }, 600);
+        }, halfDuration);
     }
 
     // ── SHARE ─────────────────────────────────────────────────────────────────────
